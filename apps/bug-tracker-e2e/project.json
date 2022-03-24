@@ -1,0 +1,28 @@
+{
+  "root": "apps/bug-tracker-e2e",
+  "sourceRoot": "apps/bug-tracker-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/bug-tracker-e2e/cypress.json",
+        "devServerTarget": "bug-tracker:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "bug-tracker:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/bug-tracker-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["bug-tracker"]
+}

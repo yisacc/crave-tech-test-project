@@ -1,0 +1,73 @@
+{
+  "root": "apps/bug-tracker",
+  "sourceRoot": "apps/bug-tracker/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/bug-tracker",
+        "index": "apps/bug-tracker/src/index.html",
+        "baseHref": "/",
+        "main": "apps/bug-tracker/src/main.tsx",
+        "polyfills": "apps/bug-tracker/src/polyfills.ts",
+        "tsConfig": "apps/bug-tracker/tsconfig.app.json",
+        "assets": [
+          "apps/bug-tracker/src/favicon.ico",
+          "apps/bug-tracker/src/assets"
+        ],
+        "styles": ["apps/bug-tracker/src/styles.scss"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/bug-tracker/src/environments/environment.ts",
+              "with": "apps/bug-tracker/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "bug-tracker:build",
+        "hmr": true
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "bug-tracker:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/bug-tracker/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/bug-tracker"],
+      "options": {
+        "jestConfig": "apps/bug-tracker/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
