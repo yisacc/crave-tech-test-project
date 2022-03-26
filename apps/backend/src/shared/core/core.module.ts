@@ -15,7 +15,7 @@ import { DatabaseModule } from '../database/database.module';
             ignoreEnvFile: false,
             isGlobal: true,
             cache: true,
-            envFilePath: ['.env', '.env.share'],
+            envFilePath: ['.env'],
         }),
         MongooseModule.forRootAsync({
             connectionName: DATABASE_CONNECTION_NAME,

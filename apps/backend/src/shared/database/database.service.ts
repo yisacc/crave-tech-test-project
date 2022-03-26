@@ -54,7 +54,6 @@ export class DatabaseService implements MongooseOptionsFactory {
         if (this.ssl) {
             mongooseOptions.ssl = true;
         }
-
         return mongooseOptions;
     }
 }

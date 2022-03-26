@@ -1,9 +1,9 @@
 import { InputType, Field, PartialType } from '@nestjs/graphql';
 import { IsNotEmpty } from 'class-validator';
-import { CreateTechStackInput } from './create-tech-stack.input';
+import { CreateBugInput } from './create-bug.input';
 
 @InputType()
-export class UpdateTechStackInput extends PartialType(CreateTechStackInput){
+export class UpdateBugInput extends PartialType(CreateBugInput){
   @IsNotEmpty()
   @Field(() => String)
   id: string;

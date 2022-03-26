@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "backend": "apps/backend",
     "bug-tracker": "apps/bug-tracker",
     "bug-tracker-e2e": "apps/bug-tracker-e2e"
   }

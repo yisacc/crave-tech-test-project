@@ -1,0 +1,85 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type TechStackEntity {
+  name: String!
+}
+
+type ProjectEntity {
+  name: String!
+  techStack: TechStackEntity!
+}
+
+type BugEntity {
+  title: String!
+  description: String!
+  project: ProjectEntity!
+}
+
+type AnswerEntity {
+  answer: String!
+}
+
+type Query {
+  techStacks: [TechStackEntity!]!
+  getTechStack(id: String!): TechStackEntity!
+  projects: [ProjectEntity!]!
+  project(id: String!): ProjectEntity!
+  bugs: [BugEntity!]!
+  bug(id: String!): BugEntity!
+  answers: [AnswerEntity!]!
+  answer(id: String!): AnswerEntity!
+}
+
+type Mutation {
+  createTechStack(createTechStackInput: CreateTechStackInput!): TechStackEntity!
+  updateProject(updateProjectInput: UpdateProjectInput!): ProjectEntity!
+  removeProject(id: String!): ProjectEntity!
+  createProject(createProjectInput: CreateProjectInput!): ProjectEntity!
+  createBug(createBugInput: CreateBugInput!): BugEntity!
+  updateBug(updateBugInput: UpdateBugInput!): BugEntity!
+  removeBug(id: String!): BugEntity!
+  createAnswer(createAnswerInput: CreateAnswerInput!): AnswerEntity!
+  updateAnswer(updateAnswerInput: UpdateAnswerInput!): AnswerEntity!
+  removeAnswer(id: String!): AnswerEntity!
+}
+
+input CreateTechStackInput {
+  name: String!
+}
+
+input UpdateProjectInput {
+  name: String
+  techStack: String
+  id: String!
+}
+
+input CreateProjectInput {
+  name: String!
+  techStack: String!
+}
+
+input CreateBugInput {
+  title: String!
+  description: String!
+  project: String!
+}
+
+input UpdateBugInput {
+  title: String
+  description: String
+  project: String
+  id: String!
+}
+
+input CreateAnswerInput {
+  answer: String!
+  bug: String!
+}
+
+input UpdateAnswerInput {
+  answer: String
+  bug: String
+  id: String!
+}
