@@ -20,12 +20,18 @@ export class BugEntity{
 
   @Prop({
     required: true,
-    unique:true,
     index: true,
   })
   @Field()
   description: string;
 
+  @Prop({
+    required:true,
+    default:true,
+    index: true,
+  })
+  @Field()
+  status: boolean;
 
   @Prop({
     required: true,

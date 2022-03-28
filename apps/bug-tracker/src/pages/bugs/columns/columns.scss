@@ -1,0 +1,33 @@
+.updating {
+  color: green !important;
+}
+.active-select,
+.in-active-select {
+  font-size: 12px;
+  line-height: 20px;
+  box-sizing: border-box;
+  border-radius: 2px;
+}
+
+.active-select {
+  color: #237804;
+}
+
+.in-active-select {
+  color: #a8071a;
+}
+.user-select {
+  width: 100%;
+}
+
+.active-select.ant-select:not(.ant-select-customize-input)
+.ant-select-selector {
+  background: #f6ffed;
+  border: 1px solid #389e0d;
+}
+
+.in-active-select.ant-select:not(.ant-select-customize-input)
+.ant-select-selector {
+  background: #fff1f0;
+  border: 1px solid #ffa39e;
+}

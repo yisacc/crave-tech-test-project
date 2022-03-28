@@ -1,13 +1,15 @@
-import { Button, Table } from 'antd';
+import { Button, notification, Table } from 'antd';
 import { useEffect, useState } from 'react';
 import BugManageModal from './bug-manage/bug-manage.modal';
-import { InMemoryCache, useQuery } from '@apollo/client';
+import { InMemoryCache, useMutation, useQuery } from '@apollo/client';
 import { TableLoading } from '../../components/loading';
 import { useLocation } from 'react-router-dom';
 import { GET_PROJECT_BY_ID } from '../../graphql/get-project-by-id';
 import ProjectOverview from './project-overview';
 import { GET_BUGS_BY_PROJECTID } from '../../graphql/get-bugs-by-project-Id';
 import { BugColumn } from './columns/columns';
+import { UPDATE_BUG } from '../../graphql/update-bug';
+import { UPDATE_BUG_STATUS } from '../../graphql/update-bug-status';
 
 
  const BugPage=()=>{
@@ -21,6 +23,9 @@ import { BugColumn } from './columns/columns';
      title: 'Add Bug',
      data: {}
    });
+   const [updating, setUpdating] = useState(false);
+   const [updatedIndex, setUpdatedIndex] = useState(-1);
+   const [rowToUpdate, setRowToUpdate] = useState(null);
    const showModal = () => {
      setModalConfig({ title: 'Add Bug', data: {} });
      setIsModalVisible(true);
@@ -43,6 +48,31 @@ import { BugColumn } from './columns/columns';
      setModalConfig({ title: 'Edit Bug', data });
      setIsModalVisible(true);
    };
+  const onSucces=()=>{
+     notification['success']({
+       message: 'Update bug',
+       description: 'Bug status updated successfully',
+       duration: 2.5,
+     });
+   }
+   const onActiveStatusChange = (data:any, index:any) => {
+     setRowToUpdate(data);
+     setUpdatedIndex(index);
+     setUpdating(true)
+     updateBugStatus({variables: {
+         id: data._id,
+         status: !data.status,
+       }})
+       .then(response=> {
+         onSucces()
+         setUpdating(false)
+         }
+       )
+       .catch(error=>{
+         console.log(error)
+         setUpdating(false)
+       })
+   };
 
    const handleModalOk=()=>{
      setIsModalVisible(false);
@@ -50,6 +80,7 @@ import { BugColumn } from './columns/columns';
    const handleModalCancel=()=>{
      setIsModalVisible(false);
    }
+
    const {
      data,
      loading,
@@ -58,6 +89,12 @@ import { BugColumn } from './columns/columns';
      { variables: { projectId } }
    );
    const { data:projectData, loading:projectLoading, error:projectError } = useQuery(GET_PROJECT_BY_ID);
+   const [updateBugStatus, { data:updateData, loading:updateLoading, error:updateError }] = useMutation(UPDATE_BUG_STATUS, {
+     refetchQueries: [
+       GET_BUGS_BY_PROJECTID,
+       'bugsByProjectId'
+     ],
+   });
    useEffect(()=>{
      const currentProject=projectData?.projects?.filter((pr:any)=>pr._id===projectId)[0]
      setProject(currentProject)
@@ -90,8 +127,10 @@ import { BugColumn } from './columns/columns';
       <Table
         columns={BugColumn(
           edit,
-          loading,
-          page
+          page,
+          updating,
+          updatedIndex,
+          onActiveStatusChange
         )}
         dataSource={data?.bugsByProjectId}
         rowKey={'_id'}

@@ -3,6 +3,7 @@ import { BugEntity, BugSchema } from './bug.schema';
 import { BugsService } from './bugs.service';
 import { CreateBugInput } from './dto/create-bug.input';
 import { UpdateBugInput } from './dto/update-bug.input';
+import { UpdateBugStatusInput } from './dto/update-bug-status-input';
 
 @Resolver(() => BugEntity)
 export class BugsResolver {
@@ -35,6 +36,14 @@ export class BugsResolver {
   ):Promise<BugEntity> {
     return await this.bugsService.update(
       updateBugInput
+    );
+  }
+  @Mutation(() => BugEntity)
+  async updateBugStatus(
+    @Args('updateBugStatusInput') updateBugStatusInput: UpdateBugStatusInput
+  ):Promise<BugEntity> {
+    return await this.bugsService.updateStatus(
+      updateBugStatusInput
     );
   }
 

@@ -5,6 +5,7 @@ import { BugDocument, BugEntity, BugSchema } from './bug.schema';
 import { CreateBugInput } from './dto/create-bug.input';
 import { ProjectEntity } from '../projects/project.schema';
 import { UpdateBugInput } from './dto/update-bug.input';
+import { UpdateBugStatusInput } from './dto/update-bug-status-input';
 
 @Injectable()
 export class BugsService {
@@ -44,6 +45,13 @@ export class BugsService {
     const bug:BugDocument=await this.bugModel.findById(id)
     bug.title=title;
     bug.description=description;
+    return await bug.save()
+  }
+
+  async updateStatus({id,status}:UpdateBugStatusInput):Promise<BugDocument> {
+    let ObjectId = require('mongoose').Types.ObjectId;
+    const bug:BugDocument=await this.bugModel.findById(new ObjectId(id))
+    bug.status=status;
     return await bug.save()
   }
 

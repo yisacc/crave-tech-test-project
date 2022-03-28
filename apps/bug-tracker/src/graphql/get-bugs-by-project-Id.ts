@@ -5,7 +5,8 @@ export const GET_BUGS_BY_PROJECTID = gql`
   {bugsByProjectId(projectId:$projectId){
     title,
   _id,
-  description
+  description,
+  status
     }
 }
 `;

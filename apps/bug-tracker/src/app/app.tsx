@@ -2,7 +2,7 @@
 import { ApolloProvider } from '@apollo/client';
 import { client } from './apollo-client/client';
 import React from 'react';
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.less'
 import './app.module.scss'
 import MainLayout from '../layouts/main-layout';
 
