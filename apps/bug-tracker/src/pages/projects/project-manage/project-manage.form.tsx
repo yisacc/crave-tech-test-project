@@ -23,6 +23,7 @@ const ProjectManageForm=({form}:any)=>{
                    rules={[{ required: true, message: 'Please select tech stack' }]}>
           <Select
             showSearch={false}
+            mode="multiple"
             placeholder="Tech-Stack"
             optionFilterProp="children"
             loading={loading}

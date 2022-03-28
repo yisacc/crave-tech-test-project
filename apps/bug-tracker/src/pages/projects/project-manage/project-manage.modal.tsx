@@ -11,7 +11,6 @@ interface formValues {
   techStack:string
 }
 
-
 const ProjectManageModal=({ modalConfig, isModalVisible, onOk, onCancel}:any)=>{
   const [form] = Form.useForm();
   const isEditMode = 'name' in modalConfig.data;
@@ -32,7 +31,9 @@ const ProjectManageModal=({ modalConfig, isModalVisible, onOk, onCancel}:any)=>{
    if(isEditMode) {
      const formData = {
        name: modalConfig.data?.name,
-       techStack: modalConfig.data?.techStack?._id
+       techStack: modalConfig.data?.techStack.map((m:any) =>
+         m._id
+       )
      }
      form.setFieldsValue(formData)
    }

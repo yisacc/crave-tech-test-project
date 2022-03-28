@@ -1,5 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsMongoId, IsNotEmpty } from 'class-validator';
+import {Schema as MongooseSchema} from 'mongoose'
 
 @InputType()
 export class CreateProjectInput{
@@ -8,7 +9,7 @@ export class CreateProjectInput{
   name:string
 
   @IsNotEmpty()
-  @IsMongoId()
-  @Field()
-  techStack: string;
+  @IsMongoId({each:true})
+  @Field(()=>[String])
+  techStack: MongooseSchema.Types.ObjectId[];
 }

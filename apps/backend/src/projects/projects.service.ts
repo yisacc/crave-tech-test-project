@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateProjectInput } from './dto/create-project.input';
 import { UpdateProjectInput } from './dto/update-project.input';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { ProjectDocument, ProjectEntity } from './project.schema';
 import { TechStackEntity } from '../tech-stack/tech-stack.schema';
 
@@ -16,7 +16,7 @@ export class ProjectsService {
   async create(createProjectInput: CreateProjectInput):Promise<ProjectEntity> {
     const create:ProjectDocument=new this.projectModel({
       name:createProjectInput.name,
-      techStack:new Types.ObjectId(createProjectInput.techStack)
+      techStack:createProjectInput.techStack
     });
     return await create.save()
   }
@@ -38,7 +38,7 @@ export class ProjectsService {
   async update({id,name,techStack}:UpdateProjectInput):Promise<ProjectDocument> {
     const project:ProjectDocument=await this.projectModel.findById(id)
     project.name=name;
-    project.techStack=new Types.ObjectId(techStack);
+    project.techStack=techStack;
 
 return await project.save()
   }

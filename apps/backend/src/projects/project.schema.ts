@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document, Types,Schema as MongooseSchema } from 'mongoose';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { TechStackEntity } from '../tech-stack/tech-stack.schema';
 
@@ -20,11 +20,12 @@ export class ProjectEntity{
 
   @Prop({
     required: true,
-    type: Types.ObjectId,
+    type: [MongooseSchema.Types.ObjectId],
+    default:[],
     ref: TechStackEntity.name,
   })
-  @Field(type=>TechStackEntity)
-  techStack: Types.ObjectId;
+  @Field(()=>[TechStackEntity] )
+  techStack: MongooseSchema.Types.ObjectId[];
 }
 
 export const ProjectDatabaseName = 'projects';

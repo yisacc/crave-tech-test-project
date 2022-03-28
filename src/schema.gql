@@ -10,7 +10,7 @@ type TechStackEntity {
 type ProjectEntity {
   _id: String!
   name: String!
-  techStack: TechStackEntity!
+  techStack: [TechStackEntity!]!
 }
 
 type BugEntity {
@@ -63,12 +63,12 @@ input UpdateTechStackInput {
 
 input CreateProjectInput {
   name: String!
-  techStack: String!
+  techStack: [String!]!
 }
 
 input UpdateProjectInput {
   name: String
-  techStack: String
+  techStack: [String!]
   id: String!
 }
 
