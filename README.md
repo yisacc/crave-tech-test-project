@@ -2,6 +2,19 @@
 
 # CraveTechBugTracker
 
+## Run it locally
+
+clone the project from and install the packages
+
+git clone https://github.com/yisacc/crave-tech-test-project
+
+## Install Package
+
+npm install
+
+## Available Scripts
+
+In the project directory, you can run:
 
 ## Running the backend
 
