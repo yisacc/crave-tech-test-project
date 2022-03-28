@@ -26,7 +26,9 @@ const Sidebar=()=>{
       bottom: 0,}}
            collapsed={collapsed}
            onCollapse={onCollapse}>
-      <div className="logo" />
+      <div className="logo"><h1 style={{fontSize:22,
+        color: 'white',
+        textAlign: 'center'}}>Crave Tech</h1></div>
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
         <Menu.Item key="1" icon={<ProjectOutlined />}>
 
