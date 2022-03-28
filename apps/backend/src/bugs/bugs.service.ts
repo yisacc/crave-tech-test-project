@@ -40,11 +40,10 @@ export class BugsService {
     return this.bugModel.find({project:new ObjectId(id)})
   }
 
-  async update({id,title,project}:UpdateBugInput):Promise<BugDocument> {
+  async update({id,title,description}:UpdateBugInput):Promise<BugDocument> {
     const bug:BugDocument=await this.bugModel.findById(id)
     bug.title=title;
-    bug.project=new Types.ObjectId(project);
-
+    bug.description=description;
     return await bug.save()
   }
 

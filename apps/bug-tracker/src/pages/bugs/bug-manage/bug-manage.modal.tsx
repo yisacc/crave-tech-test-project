@@ -2,10 +2,10 @@ import { Form, Modal, notification } from 'antd';
 import BugManageForm from './bug-manage.form';
 import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { GET_PROJECTS } from '../../../graphql/get-projects';
-import { UPDATE_PROJECT } from '../../../graphql/update-project';
 import { CREATE_BUG } from '../../../graphql/create-bug';
 import { useLocation } from 'react-router-dom';
+import { GET_BUGS_BY_PROJECTID } from '../../../graphql/get-bugs-by-project-Id';
+import { UPDATE_BUG } from '../../../graphql/update-bug';
 
 interface formValues {
   title:string,
@@ -13,28 +13,28 @@ interface formValues {
 }
 const BugManageModal=({ modalConfig, isModalVisible, onOk, onCancel}:any)=>{
   const [form] = Form.useForm();
-  const isEditMode = 'name' in modalConfig.data;
+  const isEditMode = '_id' in modalConfig.data;
   const [isFormSaving, setIsFormSaving] = useState(false);
   const location = useLocation();
   // @ts-ignore
   const { projectId } = location.state;
   const [createBug, { data, loading, error }] = useMutation(CREATE_BUG, {
     refetchQueries: [
-      GET_PROJECTS,
-      'projects'
+      GET_BUGS_BY_PROJECTID,
+      'bugsByProjectId'
     ],
   });
-  const [updateProject, { data:updateData, loading:updateLoading, error:updateError }] = useMutation(UPDATE_PROJECT, {
+  const [updateBug, { data:updateData, loading:updateLoading, error:updateError }] = useMutation(UPDATE_BUG, {
     refetchQueries: [
-      GET_PROJECTS,
-      'projects'
+      GET_BUGS_BY_PROJECTID,
+      'bugsByProjectId'
     ],
   });
  useEffect(()=>{
    if(isEditMode) {
      const formData = {
-       name: modalConfig.data?.name,
-       techStack: modalConfig.data?.techStack?._id
+       title: modalConfig.data?.title,
+       description: modalConfig.data?.description
      }
      form.setFieldsValue(formData)
    }
@@ -72,10 +72,10 @@ const BugManageModal=({ modalConfig, isModalVisible, onOk, onCancel}:any)=>{
       })
   }
   const editBug=(values:formValues)=>{
-    updateProject({variables: {
+    updateBug({variables: {
        id:modalConfig?.data?._id,
         title: values.title,
-        description: values.description,
+        description: values.description
       }})
       .then(response=> {
           showSuccess();
