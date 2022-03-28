@@ -1,11 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { BugEntity } from '../bugs/bug.schema';
 
 
 @Schema({ timestamps: true, versionKey: false })
 @ObjectType()
 export class AnswerEntity{
+  @Field()
+  _id: string;
+
   @Prop({
     required: true,
     unique:true,
@@ -14,13 +18,13 @@ export class AnswerEntity{
   @Field()
   answer: string;
 
-  // @Prop({
-  //   required: true,
-  //   type: Types.ObjectId,
-  //   ref: BugEntity.name,
-  // })
-  // @Field(type=>BugEntity)
-  // bug: Types.ObjectId;
+  @Prop({
+    required: true,
+    type: Types.ObjectId,
+    ref: BugEntity.name,
+  })
+  @Field(type=>BugEntity)
+  bug: Types.ObjectId;
 }
 
 export const AnswerDatabaseName = 'answers';

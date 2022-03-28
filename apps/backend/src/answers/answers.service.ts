@@ -38,7 +38,7 @@ export class AnswersService {
   async update({id,answer,bug}:UpdateAnswerInput):Promise<AnswerDocument> {
     const _answer:AnswerDocument=await this.answerModel.findById(id)
     _answer.answer=answer;
-    // _answer.bug=new Types.ObjectId(answer);
+    _answer.bug=new Types.ObjectId(answer);
 
     return await _answer.save()
   }

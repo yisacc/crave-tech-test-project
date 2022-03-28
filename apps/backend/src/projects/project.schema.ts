@@ -7,6 +7,9 @@ import { TechStackEntity } from '../tech-stack/tech-stack.schema';
 @Schema({ timestamps: true, versionKey: false })
 @ObjectType()
 export class ProjectEntity{
+  @Field()
+  _id: string;
+
   @Prop({
     required: true,
     unique:true,

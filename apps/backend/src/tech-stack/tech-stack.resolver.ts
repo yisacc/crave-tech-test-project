@@ -23,7 +23,7 @@ export class TechStackResolver {
   }
 
   @Mutation(() => TechStackEntity)
-  async updateProject(
+  async updateTechStack(
     @Args('updateTechStackInput') updateTechStackInput: UpdateTechStackInput
   ):Promise<TechStackEntity> {
     return await this.techStackService.update(

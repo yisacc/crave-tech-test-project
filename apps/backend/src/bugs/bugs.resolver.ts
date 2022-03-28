@@ -24,6 +24,10 @@ export class BugsResolver {
   async findOne(@Args('id', { type: () => String }) id: string):Promise<BugEntity> {
     return await this.bugsService.findOne(id);
   }
+  @Query(() => [BugEntity], { name: 'bugsByProjectId' })
+  async findByProjectId(@Args('projectId', { type: () => String }) id: string):Promise<BugEntity[]> {
+    return await this.bugsService.findByProjectId(id);
+  }
 
   @Mutation(() => BugEntity)
   async updateBug(

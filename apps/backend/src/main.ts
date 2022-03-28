@@ -12,19 +12,16 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const app: NestApplication = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
-  const env: string = configService.get<string>('app.env');
-  const tz: string = configService.get<string>('app.timezone');
-  const host: string = configService.get<string>('app.http.host');
   const port: number = configService.get<number>('app.http.port');
-  const versioning: boolean = configService.get<boolean>('app.versioning');
-
-
+const domain=configService.get<string>('app.domain')
+  app.enableCors({
+    credentials:true,
+    origin:domain
+  });
   app.useGlobalPipes(new ValidationPipe())
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
   await app.listen(port);
   Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
+    `🚀 Application is running on: http://localhost:${port}`
   );
 }
 

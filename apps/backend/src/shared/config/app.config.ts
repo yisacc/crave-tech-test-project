@@ -12,6 +12,7 @@ export default registerAs(
         },
         timezone: process.env.APP_TZ || 'Asia/Jakarta',
         debug: process.env.APP_DEBUG === 'true' || false,
+        domain: process.env.APP_DOMAIN,
         debugger: {
             http: {
                 active: true,

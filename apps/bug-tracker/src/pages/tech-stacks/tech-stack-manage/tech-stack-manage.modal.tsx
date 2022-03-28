@@ -1,7 +1,10 @@
 import { Form, Modal, notification } from 'antd';
-import ProjectManageForm from './project-manage.form';
+import TeckStackManageForm from './teck-stack-manage.form';
 import { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
+import { GET_PROJECTS } from '../../../graphql/get-projects';
+import { CREATE_TECH_STACKS } from '../../../graphql/create-tech-stack';
+import { GET_TECH_STACKS } from '../../../graphql/get-tech-stacks';
 
 const CREATE_PROJECT = gql`
   mutation createProject($name: String! $techStack: String!){
@@ -14,30 +17,30 @@ const CREATE_PROJECT = gql`
 }
 `;
 
-const ProjectManageModal=({ modalConfig, isModalVisible, onOk, onCancel}:any)=>{
+const TechStackManageModal=({ modalConfig, isModalVisible, onOk, onCancel}:any)=>{
   const [form] = Form.useForm();
   const isEditMode = '_Id' in modalConfig.data;
   const [isFormSaving, setIsFormSaving] = useState(false);
-  const [createProject, { data, loading, error }] = useMutation(CREATE_PROJECT, {
-      variables: {
-        text: "placeholder",
-        someOtherVariable: 1234,
-      },
-    });
+  const [createTechStack, { data, loading, error }] = useMutation(CREATE_TECH_STACKS, {
+    refetchQueries: [
+      GET_TECH_STACKS,
+      'techStacks'
+    ],
+  });
 
   const showSuccess = () => {
     setIsFormSaving(false);
     form.resetFields();
     notification.success({
-      message: `${isEditMode ? 'Update' : 'Add'} Project`,
-      description: `Project ${isEditMode ? 'Updated' : 'Added'} Successfully.`
+      message: `${isEditMode ? 'Update' : 'Add'} Tech Stack`,
+      description: `Tech Stack ${isEditMode ? 'Updated' : 'Added'} Successfully.`
     });
   };
   const showError = () => {
     setIsFormSaving(false);
     notification.error({
-      message: `${isEditMode ? 'Update' : 'Add'} Project`,
-      description: `unable to ${isEditMode ? 'update' : 'add'} project`
+      message: `${isEditMode ? 'Update' : 'Add'} Tech Stack`,
+      description: `unable to ${isEditMode ? 'update' : 'add'} Tech Stack`
     });
   };
   const handleModalOk = () => {
@@ -45,17 +48,16 @@ const ProjectManageModal=({ modalConfig, isModalVisible, onOk, onCancel}:any)=>{
     form
       .validateFields()
       .then(values => {
-        const [createProject, { data, loading, error }] = useMutation(CREATE_PROJECT, {
-          variables: {
-            text: values.name,
-            someOtherVariable: values.techStack,
-          },
-        });
-        if(error){
-          showError();
-        }else{
-          showSuccess();
-        }
+        createTechStack({variables: {
+            name: values.name,
+          }})
+          .then(response=> {
+              showSuccess();
+            }
+          )
+          .catch(error=>{
+            showError()
+          })
         onOk();
       })
       .catch(() => {
@@ -75,9 +77,9 @@ const ProjectManageModal=({ modalConfig, isModalVisible, onOk, onCancel}:any)=>{
              closable={false} confirmLoading={isFormSaving}
              maskClosable={false} okText={'Done'}
              className={'client-manage-modal'} width={460} style={{ top: 20 }}>
-      <ProjectManageForm form={form} />
+      <TeckStackManageForm form={form} />
       </Modal>
       </>
   )
 }
-export default ProjectManageModal
+export default TechStackManageModal

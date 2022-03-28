@@ -1,10 +1,11 @@
 import { gql } from '@apollo/client';
 
-export const CREATE_PROJECT = gql`
-  mutation createProject($name: String!
+export const UPDATE_PROJECT = gql`
+  mutation updateProject($id: String! $name: String!
   $techStack: String!
   ){
-  createProject(createProjectInput:{
+  updateProject(updateProjectInput:{
+    id:$id
     name:$name,
     techStack:$techStack
   }){

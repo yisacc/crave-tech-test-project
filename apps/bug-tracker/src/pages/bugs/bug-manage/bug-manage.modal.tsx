@@ -1,22 +1,24 @@
 import { Form, Modal, notification } from 'antd';
-import ProjectManageForm from './project-manage.form';
+import BugManageForm from './bug-manage.form';
 import { useEffect, useState } from 'react';
-import { gql, useMutation } from '@apollo/client';
-import { CREATE_PROJECT } from '../../../graphql/create-project';
+import { useMutation } from '@apollo/client';
 import { GET_PROJECTS } from '../../../graphql/get-projects';
 import { UPDATE_PROJECT } from '../../../graphql/update-project';
+import { CREATE_BUG } from '../../../graphql/create-bug';
+import { useLocation } from 'react-router-dom';
 
 interface formValues {
-  name:string,
-  techStack:string
+  title:string,
+  description:string
 }
-
-
 const BugManageModal=({ modalConfig, isModalVisible, onOk, onCancel}:any)=>{
   const [form] = Form.useForm();
   const isEditMode = 'name' in modalConfig.data;
   const [isFormSaving, setIsFormSaving] = useState(false);
-  const [createProject, { data, loading, error }] = useMutation(CREATE_PROJECT, {
+  const location = useLocation();
+  // @ts-ignore
+  const { projectId } = location.state;
+  const [createBug, { data, loading, error }] = useMutation(CREATE_BUG, {
     refetchQueries: [
       GET_PROJECTS,
       'projects'
@@ -42,21 +44,22 @@ const BugManageModal=({ modalConfig, isModalVisible, onOk, onCancel}:any)=>{
     setIsFormSaving(false);
     form.resetFields();
     notification.success({
-      message: `${isEditMode ? 'Update' : 'Add'} Project`,
-      description: `Project ${isEditMode ? 'Updated' : 'Added'} Successfully.`
+      message: `${isEditMode ? 'Update' : 'Add'} Bug`,
+      description: `Bug ${isEditMode ? 'Updated' : 'Added'} Successfully.`
     });
   };
   const showError = () => {
     setIsFormSaving(false);
     notification.error({
-      message: `${isEditMode ? 'Update' : 'Add'} Project`,
-      description: `unable to ${isEditMode ? 'update' : 'add'} project`
+      message: `${isEditMode ? 'Update' : 'Add'} Bug`,
+      description: `unable to ${isEditMode ? 'update' : 'add'} bug`
     });
   };
-  const addProject=(values:formValues)=>{
-    createProject({variables: {
-        name: values.name,
-        techStack: values.techStack,
+  const addBug=(values:formValues)=>{
+    createBug({variables: {
+        title: values.title,
+        description: values.description,
+        project:projectId
       }})
       .then(response=> {
           showSuccess();
@@ -68,11 +71,11 @@ const BugManageModal=({ modalConfig, isModalVisible, onOk, onCancel}:any)=>{
         onOk()
       })
   }
-  const editProject=(values:formValues)=>{
+  const editBug=(values:formValues)=>{
     updateProject({variables: {
        id:modalConfig?.data?._id,
-        name: values.name,
-        techStack: values.techStack,
+        title: values.title,
+        description: values.description,
       }})
       .then(response=> {
           showSuccess();
@@ -89,11 +92,11 @@ const BugManageModal=({ modalConfig, isModalVisible, onOk, onCancel}:any)=>{
     form
       .validateFields()
       .then(values => {
-        const {name,techStack}=values
+        const {title,description}=values
         if(isEditMode){
-          editProject({name,techStack})
+          editBug({title,description})
         }else{
-          addProject({name,techStack})
+          addBug({title,description})
         }
       })
       .catch((error) => {
@@ -113,8 +116,8 @@ const BugManageModal=({ modalConfig, isModalVisible, onOk, onCancel}:any)=>{
       <Modal title={modalConfig.title} visible={isModalVisible} onOk={handleModalOk} onCancel={handleModalCancel}
              closable={false} confirmLoading={isFormSaving}
              maskClosable={false} okText={'Done'}
-             className={'client-manage-modal'} width={460} style={{ top: 20 }}>
-      <ProjectManageForm form={form} />
+             className={'client-manage-modal'} width={800} style={{ top: 20 }}>
+      <BugManageForm form={form} />
       </Modal>
       </>
   )

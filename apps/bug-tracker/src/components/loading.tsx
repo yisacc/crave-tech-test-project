@@ -1,6 +1,6 @@
 import { Skeleton } from 'antd';
 
-export function ProjectLoading() {
+export function TableLoading() {
   return (
       <>
         <div className="flex justify-between p-2">

@@ -1,49 +1,41 @@
 import { Button,Table } from 'antd';
-import { FC, useState } from 'react';
-import ProjectManageModal from './project-manage/project-manage.modal';
-import { ProjectColumn } from './columns/columns';
-import { useQuery, gql } from "@apollo/client";
-import { ProjectLoading } from './project-loading';
+import {useState } from 'react';
+import TechStackManageModal from './tech-stack-manage/tech-stack-manage.modal';
+import {  TechStackColumn } from './columns/columns';
+import { useQuery } from "@apollo/client";
+import { GET_TECH_STACKS } from '../../graphql/get-tech-stacks';
+import { TableLoading } from '../../components/loading';
 
-const GetProjects = gql`{
-  projects{
-    name,
-    techStack{
-      name
-    }
-  }
-}
-`;
 
- const ProjectPage=()=>{
+
+ const TechStackPage=()=>{
    const [page,setPage]=useState(1)
-   const [updatedIndex, setUpdatedIndex] = useState(-1);
-   const [isProjectModalVisible, setIsProjectModalVisible] = useState(false);
-   const [projectModalConfig, setProjectModalConfig] = useState({
-     title: 'Add Project',
+   const [isModalVisible, setIsModalVisible] = useState(false);
+   const [modalConfig, setModalConfig] = useState({
+     title: 'Add Tech-Stack',
      data: {}
    });
-   const showProjectModal = () => {
-     setProjectModalConfig({ title: 'Add Project', data: {} });
-     setIsProjectModalVisible(true);
+   const showModal = () => {
+     setModalConfig({ title: 'Add Tech-Stack', data: {} });
+     setIsModalVisible(true);
    };
 
-   const editProject = (data:[]) => {
-     setProjectModalConfig({ title: 'Edit Project', data });
-     setIsProjectModalVisible(true);
+   const edit = (data:[]) => {
+     setModalConfig({ title: 'Edit Tech-Stack', data });
+     setIsModalVisible(true);
    };
 
-   const handleProjectModalOk=()=>{
-     setIsProjectModalVisible(false);
+   const handleModalOk=()=>{
+     setIsModalVisible(false);
 
    }
-   const handleProjectModalCancel=()=>{
-     setIsProjectModalVisible(false);
+   const handleModalCancel=()=>{
+     setIsModalVisible(false);
 
    }
-   const { data, loading, error } = useQuery(GetProjects);
+   const { data, loading, error } = useQuery(GET_TECH_STACKS);
   if(loading){
-    return <ProjectLoading />
+    return <TableLoading />
   }
   return(
     <div className="p-2">
@@ -55,26 +47,25 @@ const GetProjects = gql`{
           type="primary"
           htmlType="submit"
           className="app-btn-container-btn pl-10 pr-10"
-          onClick={showProjectModal}
+          onClick={showModal}
         >
-          Add Project
+          Add Tech-Stack
         </Button>
-        <ProjectManageModal
-          modalConfig={projectModalConfig}
-          isModalVisible={isProjectModalVisible}
-          onOk={handleProjectModalOk}
-          onCancel={handleProjectModalCancel}
+        <TechStackManageModal
+          modalConfig={modalConfig}
+          isModalVisible={isModalVisible}
+          onOk={handleModalOk}
+          onCancel={handleModalCancel}
         />
       </div>
       <Table
-        columns={ProjectColumn(
-          editProject,
+        columns={TechStackColumn(
+          edit,
           loading,
-          updatedIndex,
           page
         )}
-        dataSource={data?.projects}
-        rowKey={'ProjectId'}
+        dataSource={data?.techStacks}
+        rowKey={'_id'}
         pagination={{
           pageSize: 10,
           onChange(current) {
@@ -93,4 +84,4 @@ const GetProjects = gql`{
     </div>
   )
 }
-export default ProjectPage
+export default TechStackPage

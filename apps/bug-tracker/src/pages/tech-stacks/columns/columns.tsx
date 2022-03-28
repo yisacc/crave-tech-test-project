@@ -2,14 +2,11 @@ import { Button, Select, Typography } from 'antd';
 import React from 'react';
 import { Icon } from '@iconify/react';
 
-const { Option } = Select;
-const { Title } = Typography;
 
-export const ProjectColumn = (
+export const TechStackColumn = (
   onEditProject:any,
-  updating:any,
-  updatedIndex:any,
-  page:any
+  updating:boolean,
+  page:number
 ) => {
   return [
     {
@@ -18,24 +15,17 @@ export const ProjectColumn = (
       render: (text:any, record:any, rowIndex:any) => (page - 1) * 10 + rowIndex + 1
     },
     {
-      title: 'Project',
+      title: 'Tech-Stack',
       dataIndex: 'name',
-      sorter: (a:any, b:any) => a.Name.localeCompare(b.Name),
-    },
-    {
-      title: 'Tech Stack',
-      dataIndex: 'techStack',
-      render: (techStack:{name:string}) => {
-        return <span>{techStack?.name || '-'}</span>;
-      },
+      sorter: (a:any, b:any) => a.name.localeCompare(b.name),
     },
     {
       title: 'Action',
       dataIndex: 'action',
-      render: (text:any, record:any, index:any) => {
+      render: (text:any, record:any) => {
         return (
           <Button
-            key={index}
+            key={Math.random()}
             onClick={() => onEditProject(record)}
             type="link"
             className="edit-btn flex items-center justify-left"

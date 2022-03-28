@@ -1,44 +1,73 @@
-import { Button, Input, Table } from 'antd';
-import { useState } from 'react';
-import ProjectManageModal from './project-manage/project-manage.modal';
-import { ProjectColumn } from './columns/columns';
-import { useQuery } from "@apollo/client";
-import { ProjectLoading } from './project-loading';
-import { GET_PROJECTS } from '../../graphql/get-projects';
-import { Icon } from '@iconify/react';
+import { Button, Table } from 'antd';
+import { useEffect, useState } from 'react';
+import BugManageModal from './bug-manage/bug-manage.modal';
+import { InMemoryCache, useQuery } from '@apollo/client';
+import { TableLoading } from '../../components/loading';
+import { useLocation } from 'react-router-dom';
+import { GET_PROJECT_BY_ID } from '../../graphql/get-project-by-id';
+import ProjectOverview from './project-overview';
+import { GET_BUGS_BY_PROJECTID } from '../../graphql/get-bugs-by-project-Id';
+import { BugColumn } from './columns/columns';
 
 
- const ProjectPage=()=>{
+ const BugPage=()=>{
+   const location = useLocation();
+   // @ts-ignore
+   const { projectId } = location.state;
    const [page,setPage]=useState(1)
-   const [isProjectModalVisible, setIsProjectModalVisible] = useState(false);
-   const [projectModalConfig, setProjectModalConfig] = useState({
-     title: 'Add Project',
+   const [project,setProject]=useState({})
+   const [isModalVisible, setIsModalVisible] = useState(false);
+   const [modalConfig, setModalConfig] = useState({
+     title: 'Add Bug',
      data: {}
    });
-   const showProjectModal = () => {
-     setProjectModalConfig({ title: 'Add Project', data: {} });
-     setIsProjectModalVisible(true);
+   const showModal = () => {
+     setModalConfig({ title: 'Add Bug', data: {} });
+     setIsModalVisible(true);
    };
 
-   const editProject = (data:[]) => {
-     setProjectModalConfig({ title: 'Edit Project', data });
-     setIsProjectModalVisible(true);
+   const cache = new InMemoryCache({
+     typePolicies: {
+       Query: {
+         fields: {
+           readProjects: {
+             read(projects, options) {
+               return projects;
+             }
+           }
+         },
+       },
+     },
+   });
+   const edit = (data:[]) => {
+     setModalConfig({ title: 'Edit Bug', data });
+     setIsModalVisible(true);
    };
 
-   const handleProjectModalOk=()=>{
-     setIsProjectModalVisible(false);
+   const handleModalOk=()=>{
+     setIsModalVisible(false);
    }
-   const handleProjectModalCancel=()=>{
-     setIsProjectModalVisible(false);
+   const handleModalCancel=()=>{
+     setIsModalVisible(false);
    }
-
-
-   const { data, loading, error } = useQuery(GET_PROJECTS);
+   const {
+     data,
+     loading,
+     error,
+   } = useQuery(GET_BUGS_BY_PROJECTID,
+     { variables: { projectId } }
+   );
+   const { data:projectData, loading:projectLoading, error:projectError } = useQuery(GET_PROJECT_BY_ID);
+   useEffect(()=>{
+     const currentProject=projectData?.projects?.filter((pr:any)=>pr._id===projectId)[0]
+     setProject(currentProject)
+   },[projectData])
   if(loading){
-    return <ProjectLoading />
+    return <TableLoading />
   }
   return(
     <div className="p-2">
+      <ProjectOverview project={project} />
       <div className="flex justify-between items-center mb-5">
         <div className="flex items-center justify-center">
         </div>
@@ -47,24 +76,24 @@ import { Icon } from '@iconify/react';
           type="primary"
           htmlType="submit"
           className="app-btn-container-btn pl-10 pr-10"
-          onClick={showProjectModal}
+          onClick={showModal}
         >
-          Add Project
+          Add Bug
         </Button>
-        <ProjectManageModal
-          modalConfig={projectModalConfig}
-          isModalVisible={isProjectModalVisible}
-          onOk={handleProjectModalOk}
-          onCancel={handleProjectModalCancel}
+        <BugManageModal
+          modalConfig={modalConfig}
+          isModalVisible={isModalVisible}
+          onOk={handleModalOk}
+          onCancel={handleModalCancel}
         />
       </div>
       <Table
-        columns={ProjectColumn(
-          editProject,
+        columns={BugColumn(
+          edit,
           loading,
           page
         )}
-        dataSource={data?.projects}
+        dataSource={data?.bugsByProjectId}
         rowKey={'_id'}
         pagination={{
           pageSize: 10,
@@ -84,4 +113,4 @@ import { Icon } from '@iconify/react';
     </div>
   )
 }
-export default ProjectPage
+export default BugPage

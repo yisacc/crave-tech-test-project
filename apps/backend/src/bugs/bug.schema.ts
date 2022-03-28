@@ -7,6 +7,9 @@ import { ProjectEntity } from '../projects/project.schema';
 @Schema({ timestamps: true, versionKey: false })
 @ObjectType()
 export class BugEntity{
+  @Field()
+  _id: string;
+
   @Prop({
     required: true,
     unique:true,

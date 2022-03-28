@@ -3,22 +3,27 @@
 # ------------------------------------------------------
 
 type TechStackEntity {
+  _id: String!
   name: String!
 }
 
 type ProjectEntity {
+  _id: String!
   name: String!
   techStack: TechStackEntity!
 }
 
 type BugEntity {
+  _id: String!
   title: String!
   description: String!
   project: ProjectEntity!
 }
 
 type AnswerEntity {
+  _id: String!
   answer: String!
+  bug: BugEntity!
 }
 
 type Query {
@@ -28,15 +33,17 @@ type Query {
   project(id: String!): ProjectEntity!
   bugs: [BugEntity!]!
   bug(id: String!): BugEntity!
+  bugsByProjectId(projectId: String!): [BugEntity!]!
   answers: [AnswerEntity!]!
   answer(id: String!): AnswerEntity!
 }
 
 type Mutation {
   createTechStack(createTechStackInput: CreateTechStackInput!): TechStackEntity!
-  updateProject(updateProjectInput: UpdateProjectInput!): ProjectEntity!
+  updateTechStack(updateTechStackInput: UpdateTechStackInput!): TechStackEntity!
   removeProject(id: String!): ProjectEntity!
   createProject(createProjectInput: CreateProjectInput!): ProjectEntity!
+  updateProject(updateProjectInput: UpdateProjectInput!): ProjectEntity!
   createBug(createBugInput: CreateBugInput!): BugEntity!
   updateBug(updateBugInput: UpdateBugInput!): BugEntity!
   removeBug(id: String!): BugEntity!
@@ -49,15 +56,20 @@ input CreateTechStackInput {
   name: String!
 }
 
-input UpdateProjectInput {
+input UpdateTechStackInput {
   name: String
-  techStack: String
   id: String!
 }
 
 input CreateProjectInput {
   name: String!
   techStack: String!
+}
+
+input UpdateProjectInput {
+  name: String
+  techStack: String
+  id: String!
 }
 
 input CreateBugInput {

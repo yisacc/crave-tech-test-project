@@ -1,9 +1,12 @@
 import { gql } from '@apollo/client';
 
-export const GET_TECH_STACKS = gql`{
-  techStacks {
-  name,
-  _id
-}
+export const CREATE_TECH_STACKS = gql`
+  mutation createTechStack($name: String!
+  ){
+  createTechStack(createTechStackInput:{
+    name:$name
+  }){
+    name
+  }
 }
 `;

@@ -35,6 +35,10 @@ export class BugsService {
       model:ProjectEntity.name
     });
   }
+  async findByProjectId(id:String):Promise<BugDocument[]> {
+    let ObjectId = require('mongoose').Types.ObjectId;
+    return this.bugModel.find({project:new ObjectId(id)})
+  }
 
   async update({id,title,project}:UpdateBugInput):Promise<BugDocument> {
     const bug:BugDocument=await this.bugModel.findById(id)

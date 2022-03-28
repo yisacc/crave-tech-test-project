@@ -1,0 +1,43 @@
+.logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+.app-btn-container {
+  &-btn {
+    background: linear-gradient(127.43deg, #262626 32.59%, #030852 78.32%);
+    border: 1px solid #262626;
+    box-sizing: border-box;
+    box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.043);
+    border-radius: 2px;
+    animation-timing-function: ease-out;
+    animation-duration: 300ms;
+  }
+
+  .ant-btn-primary:hover {
+    background: linear-gradient(154.58deg, #262626 15.08%, #262626 65.24%);
+    box-shadow: 0px 8px 13px rgba(0, 0, 0, 0.24);
+    border-radius: 2px;
+  }
+
+  .ant-btn-primary:focus {
+    background: linear-gradient(127.43deg, #262626 32.59%, #030852 78.32%);
+  }
+}
+
+.ant-btn-primary:hover {
+  background: linear-gradient(154.58deg, #262626 15.08%, #262626 65.24%);
+  box-shadow: 0px 8px 13px rgba(0, 0, 0, 0.24);
+  border-radius: 2px;
+}
+
+.ant-btn-primary:focus {
+  background: linear-gradient(127.43deg, #262626 32.59%, #030852 78.32%);
+}
+.edit-btn:hover {
+  border-color: #c0e29d;
+}

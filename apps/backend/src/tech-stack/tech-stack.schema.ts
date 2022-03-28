@@ -6,6 +6,8 @@ import { Field, ObjectType } from '@nestjs/graphql';
 @Schema({ timestamps: true, versionKey: false })
 @ObjectType()
 export class TechStackEntity {
+  @Field()
+  _id: string;
   @Prop({
     required: true,
     unique:true,

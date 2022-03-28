@@ -1,12 +1,15 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.scss';
 import { ApolloProvider } from '@apollo/client';
 import { client } from './apollo-client/client';
+import React from 'react';
+import 'antd/dist/antd.css';
+import './app.module.scss'
+import MainLayout from '../layouts/main-layout';
 
 export function App() {
   return (
     <ApolloProvider client={client}>
-      <h1>Test</h1>
+      <MainLayout />
     </ApolloProvider>
   );
 }
